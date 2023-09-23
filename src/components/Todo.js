@@ -3,7 +3,7 @@ import { TodoContext } from '../Context';
 
 
 export default function Todo() {
-    const { newTodo, setNewTodo, todos, setTodos, editId, setEditId, HandleClick, HandleDelete, HandleEdit, HandleCreateTodo } = TodoContext()
+    const { newTodo, setNewTodo, todos, setTodos, editId, setEditId, HandleCheck, HandleDelete, HandleEdit, HandleCreateTodo } = TodoContext()
 
     useEffect(() => {
         let canceled = false;
@@ -20,54 +20,54 @@ export default function Todo() {
 
         return () => (canceled = true);
     }, []);
-    <div className="todo-wrapper">
-        <input type='text' placeholder='create new entry' value={newTodo} onChange={(e) => setNewTodo(e.target.value)}/>
-        <button onClick={HandleCreateTodo}>create</button>
-    <ul>
-        {!!todos.length &&
-            todos.map((todo) => (
-                <li className="todo" key={todo.id}>
+    return (<div className="todo-wrapper">
+    <input type='text' placeholder='create new entry' value={newTodo} onChange={(e) => setNewTodo(e.target.value)}/>
+    <button onClick={HandleCreateTodo}>create</button>
+<ul>
+    {!!todos?.length &&
+        todos.map((todo) => (
+            <li className="todo" key={todo.id}>
+                <input
+                    type="checkbox"
+                    checked={todo.completed}
+                    onChange={() => HandleCheck(todo.id)}
+                />
+                {editId === todo.id ? (
                     <input
-                        type="checkbox"
-                        checked={todo.completed}
-                        onChange={() => HandleClick(todo.id)}
+                        type="text"
+                        value={todo.title}
+                        onChange={HandleEdit}
                     />
-                    {editId === todo.id ? (
-                        <input
-                            type="text"
-                            value={todo.title}
-                            onChange={HandleEdit}
-                        />
-                    ) : (
-                        <span
-                            className={`todo-title ${
-                                todo.completed && "checked"
-                            }`}
-                        >
-                            {todo.title}
-                        </span>
-                    )}
-                    {editId === todo.id ? (
-                        <button onClick={() => setEditId(null)}>
-                            ✅
-                        </button>
-                    ) : (
-                        <button
-                            className="del-button"
-                            onClick={() => setEditId(todo.id)}
-                            disabled={todo.completed}
-                        >
-                            ✏️
-                        </button>
-                    )}
+                ) : (
+                    <span
+                        className={`todo-title ${
+                            todo.completed && "checked"
+                        }`}
+                    >
+                        {todo.title}
+                    </span>
+                )}
+                {editId === todo.id ? (
+                    <button onClick={() => setEditId(null)}>
+                        ✅
+                    </button>
+                ) : (
                     <button
                         className="del-button"
-                        onClick={() => HandleDelete(todo.id)}
+                        onClick={() => setEditId(todo.id)}
+                        disabled={todo.completed}
                     >
-                        🗑️
+                        ✏️
                     </button>
-                </li>
-            ))}
-    </ul>
-    </div>
+                )}
+                <button
+                    className="del-button"
+                    onClick={() => HandleDelete(todo.id)}
+                >
+                    🗑️
+                </button>
+            </li>
+        ))}
+</ul>
+</div>)
 }

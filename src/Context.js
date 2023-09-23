@@ -1,8 +1,8 @@
-import { React } from "react";
-import { useState } from "react";
+import React, { useContext, useState } from "react";
 
+const Context = React.createContext()
 
-export const TodoContext = React.createContext()
+export const TodoContext = () => useContext(Context)
 
 export function TodoProvider({ children }) {
     const [todos, setTodos] = useState([]);
@@ -30,7 +30,7 @@ export function TodoProvider({ children }) {
         setTodos(newTodos);
     };
 
-    const HandleCreateTodo = (e) => {
+    const HandleCreateTodo = () => {
         if (newTodo.trim() !== '') {
             const newTodos = [
                 ...todos,
@@ -57,15 +57,15 @@ export function TodoProvider({ children }) {
         setEditId,
         newTodo,
         setNewTodo,
-        HandleCreateTodo
+        HandleCreateTodo,
     }
     return(
-        <TodoContext.Provider
-        value={{
+        <Context.Provider
+        value={
             TodoState
-        }}>
+        }>
             {children}
-        </TodoContext.Provider>
+        </Context.Provider>
     )
 
 
