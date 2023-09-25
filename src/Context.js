@@ -27,7 +27,7 @@ export function TodoProvider({ children }) {
         setTodos(newTodos);
     };
     const HandleEdit = (e) => {
-        if (e.target.value.trim() != "") {
+        if (e.target.value.trim() !== "") {
             const newTodos = todos.map((todo) =>
                 todo.id === editId ? { ...todo, title: e.target.value } : todo
             );
