@@ -8,6 +8,9 @@ export function TodoProvider({ children }) {
     const [todos, setTodos] = useState([]);
     const [editId, setEditId] = useState(null);
     const [newTodo, setNewTodo] = useState('');
+    const [isEditing, setIsEditing] = useState(false);
+    const [error, setError] = useState(false);
+    const [isEmpty, setIsEmpty] = useState(false);
 
     const HandleCheck = (id) => {
         const newTodos = todos.map((todo) =>
@@ -24,10 +27,19 @@ export function TodoProvider({ children }) {
         setTodos(newTodos);
     };
     const HandleEdit = (e) => {
-        const newTodos = todos.map((todo) =>
-            todo.id === editId ? { ...todo, title: e.target.value } : todo
-        );
-        setTodos(newTodos);
+        if (e.target.value.trim() != "") {
+            const newTodos = todos.map((todo) =>
+                todo.id === editId ? { ...todo, title: e.target.value } : todo
+            );
+            setTodos(newTodos);
+            setIsEmpty(false);
+        } else  {
+            setIsEmpty(true);
+            setError(true);
+            setTimeout(() => {
+                setError(false);
+            }, [2000])
+        }
     };
 
     const HandleCreateTodo = () => {
@@ -42,9 +54,12 @@ export function TodoProvider({ children }) {
             ]
             setTodos(newTodos)
             setNewTodo('')
+        } else {
+            setError(true);
+            setTimeout(() => {
+                setError(false);
+            }, [2000])
         }
-
-
     }
 
     const TodoState = {
@@ -58,6 +73,11 @@ export function TodoProvider({ children }) {
         newTodo,
         setNewTodo,
         HandleCreateTodo,
+        isEditing,
+        setIsEditing,
+        error,
+        setError,
+        isEmpty
     }
     return(
         <Context.Provider

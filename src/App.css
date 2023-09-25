@@ -1,21 +1,39 @@
-* {
-    background-color: #999;
-}
-.todo-wrapper {
+/* Reset the background color for better readability */
+body {
+    background-color: #B22222;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .todo-wrapper {
     width: 50rem;
     margin: 4rem auto;
-}
-
-.todo {
+    background-color: #FFD1DC;
+    border: 1px solid #ccc;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .todo {
     margin: 0.8rem 0;
-}
-
-.todo-title {
-    font-style: bold;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    background-color: #FFD1DC;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .todo-title {
+    font-weight: bold;
     font-size: 1.5rem;
-}
-
-.checked {
+    flex-grow: 1;
+  }
+  
+  .checked {
     text-decoration: line-through;
     color: red;
-}
+  }
+  

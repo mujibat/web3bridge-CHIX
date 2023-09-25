@@ -1,28 +1,13 @@
-import { useEffect } from 'react'
 import { TodoContext } from '../Context';
 
-
 export default function Todo() {
-    const { newTodo, setNewTodo, todos, setTodos, editId, setEditId, HandleCheck, HandleDelete, HandleEdit, HandleCreateTodo } = TodoContext()
+    const { isEmpty, error, newTodo, setNewTodo, todos, editId, setEditId, HandleCheck, HandleDelete, HandleEdit, HandleCreateTodo, setIsEditing, isEditing } = TodoContext()
 
-    useEffect(() => {
-        let canceled = false;
-        fetch("https://jsonplaceholder.typicode.com/todos")
-            .then((res) => res.json())
-            .then((data) => {
-                if (!canceled) {
-                    setTodos(data.slice(0, 10));
-                }
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-
-        return () => (canceled = true);
-    }, []);
+ 
     return (<div className="todo-wrapper">
     <input type='text' placeholder='create new entry' value={newTodo} onChange={(e) => setNewTodo(e.target.value)}/>
     <button onClick={HandleCreateTodo}>create</button>
+    {error && <p>There is an error</p>}
 <ul>
     {!!todos?.length &&
         todos.map((todo) => (
@@ -30,7 +15,7 @@ export default function Todo() {
                 <input
                     type="checkbox"
                     checked={todo.completed}
-                    onChange={() => HandleCheck(todo.id)}
+                    onChange={() => !isEditing && HandleCheck(todo.id)}
                 />
                 {editId === todo.id ? (
                     <input
@@ -48,13 +33,19 @@ export default function Todo() {
                     </span>
                 )}
                 {editId === todo.id ? (
-                    <button onClick={() => setEditId(null)}>
+                    <button disabled={isEmpty} onClick={() => {
+                        setEditId(null);
+                        setIsEditing(false);
+                    }}>
                         ✅
                     </button>
                 ) : (
                     <button
                         className="del-button"
-                        onClick={() => setEditId(todo.id)}
+                        onClick={() => {
+                            setEditId(todo.id);
+                            setIsEditing(true);
+                        }}
                         disabled={todo.completed}
                     >
                         ✏️
